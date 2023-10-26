@@ -1,8 +1,11 @@
-import { useRef, useState, Children } from "react";
+import { useRef, useState, Children, useEffect } from "react";
 import { easeIn, easeOut } from "polished";
 import { useBoolean } from "react-use";
 import { createReducer } from "@reduxjs/toolkit";
 import { Movie } from "./types/movie";
+import { Container } from "@mui/material";
+import axios from "axios";
+import { useMovies } from "./hooks/useMovies";
 
 // TODO: use https://giddy-beret-cod.cyclic.app/movieCompanies
 const mockMovieCompanyData: any = [{ id: "1", name: "Test Productions" }];
@@ -28,6 +31,7 @@ const mockMovieData: Movie[] = [
 ];
 
 export const App = () => {
+  const movies = useMovies();
   const movieLength = useRef(mockMovieData.length);
   const [selectedMovie, setSelectedMovie] = useState<Movie>();
 
@@ -40,8 +44,8 @@ export const App = () => {
   };
 
   return (
-    <div>
-      <h2>Welcome to Movie database!</h2>
+    <Container maxWidth="md">
+      <h1>Welcome to Movie database!</h1>
       {refreshButton("Refresh")}
       <p>Total movies displayed {movieLength.current}</p>
       <span>Title - Review - Film Company</span>
@@ -81,6 +85,6 @@ export const App = () => {
           </form>
         )}
       </div>
-    </div>
+    </Container>
   );
 };
