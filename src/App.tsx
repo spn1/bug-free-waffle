@@ -3,54 +3,37 @@ import { easeIn, easeOut } from "polished";
 import { useBoolean } from "react-use";
 import { createReducer } from "@reduxjs/toolkit";
 import { Movie } from "./types/movie";
-import { Container } from "@mui/material";
+import { Container, Button } from "@mui/material";
+import { MovieTable } from "./components/MovieTable";
 import axios from "axios";
-import { useMovies } from "./hooks/useMovies";
 
 // TODO: use https://giddy-beret-cod.cyclic.app/movieCompanies
 const mockMovieCompanyData: any = [{ id: "1", name: "Test Productions" }];
 
-// TODO: use https://giddy-beret-cod.cyclic.app/movies
-const mockMovieData: Movie[] = [
-  {
-    id: "1",
-    reviews: [6, 8, 3, 9, 8, 7, 8],
-    title: "A Testing Film",
-    filmCompanyId: "1",
-    cost: 534,
-    releaseYear: 2005,
-  },
-  {
-    id: "2",
-    reviews: [5, 7, 3, 4, 1, 6, 3],
-    title: "Mock Test Film",
-    filmCompanyId: "1",
-    cost: 6234,
-    releaseYear: 2006,
-  },
-];
-
 export const App = () => {
-  const movies = useMovies();
+  const [movies, setMovies] = useState([]);
   const movieLength = useRef(mockMovieData.length);
   const [selectedMovie, setSelectedMovie] = useState<Movie>();
 
-  const refreshButton = (buttonText: any) => {
-    if (mockMovieCompanyData) {
-      return <button>{buttonText}</button>;
-    } else {
-      return <p>No movies loaded yet</p>;
-    }
-  };
+  useEffect(() => {
+    const fetchMovies = async () => {
+      axios
+        .get("https://giddy-beret-cod.cyclic.app/movies")
+        .then(({ data }) => {
+          setMovies(data);
+        });
+    };
+
+    fetchMovies();
+  }, []);
 
   return (
     <Container maxWidth="md">
       <h1>Welcome to Movie database!</h1>
-      {refreshButton("Refresh")}
+      <Button variant="contained">Refresh</Button>
       <p>Total movies displayed {movieLength.current}</p>
-      <span>Title - Review - Film Company</span>
-      <br />
-      {mockMovieData.map((movie: any) => (
+      {movies?.length && <MovieTable movies={movies} />}
+      {/* {mockMovieData.map((movie: any) => (
         <span
           onClick={() => {
             setSelectedMovie(movie);
@@ -65,11 +48,9 @@ export const App = () => {
             mockMovieCompanyData.find((f: any) => f.id === movie.filmCompanyId)
               ?.name
           }
-          <br />
         </span>
-      ))}
-      <br />
-      <div>
+      ))} */}
+      {/* <div>
         {selectedMovie
           ? selectedMovie.title
             ? (("You have selected " + selectedMovie.title) as any)
@@ -84,7 +65,7 @@ export const App = () => {
             </label>
           </form>
         )}
-      </div>
+      </div> */}
     </Container>
   );
 };

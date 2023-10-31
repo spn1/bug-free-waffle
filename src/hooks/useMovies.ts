@@ -5,17 +5,39 @@ import axios from "axios";
 const fetchMovies = async (): Promise<Movie[]> => {
   const response = await axios.get("https://giddy-beret-cod.cyclic.app/movies");
   const { data } = response;
-  console.log(response);
+
+  console.log("Movies: ", data);
+
   return data;
 };
 
 export const useMovies = () => {
-  const [movies, setMovies] = useState<Movie[]>();
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>();
 
   useEffect(() => {
-    const movies = fetchMovies();
-    setMovies(movies);
+    const fetchMovies = async (): Promise<Movie[]> => {
+      const response = await axios.get(
+        "https://giddy-beret-cod.cyclic.app/movies"
+      );
+      const { data } = response;
+
+      console.log("Movies: ", data);
+
+      return data;
+    };
+
+    try {
+      setLoading(true);
+      const data = fetchMovies();
+      setMovies(data);
+      setLoading(false);
+    } catch (error) {
+      setError(error?.message);
+      setLoading(false);
+    }
   }, []);
 
-  return [movies];
+  return { movies, loading, error };
 };
