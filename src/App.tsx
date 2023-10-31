@@ -12,7 +12,7 @@ const mockMovieCompanyData: any = [{ id: "1", name: "Test Productions" }];
 
 export const App = () => {
   const [movies, setMovies] = useState([]);
-  const movieLength = useRef(mockMovieData.length);
+  const movieLength = useRef(movies.length);
   const [selectedMovie, setSelectedMovie] = useState<Movie>();
 
   useEffect(() => {
