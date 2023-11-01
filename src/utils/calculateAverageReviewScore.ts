@@ -4,5 +4,5 @@ export const calculateAverageReviewScore = (reviews: number[] = []): number => {
   const sum = reviews.reduce((sum, score) => sum + score, 0);
   const average = sum / reviews.length;
 
-  return average;
+  return Math.round(average * 10) / 10; // Round to 1 decimal point
 };
