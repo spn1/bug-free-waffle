@@ -12,7 +12,7 @@ import { MovieReviewForm } from "./components/MovieReviewForm";
 const mockMovieCompanyData: any = [{ id: "1", name: "Test Productions" }];
 
 export const App = () => {
-  const [movies, setMovies] = useState([]);
+  const [movies, setMovies] = useState<Movie[]>([]);
   const [selectedMovie, setSelectedMovie] = useState<Movie>();
 
   useEffect(() => {
@@ -34,9 +34,7 @@ export const App = () => {
       <h1>Welcome to Movie database!</h1>
       <Button variant="contained">Refresh</Button>
       <p>Total movies displayed: {movies.length}</p>
-      {movies?.length && (
-        <MovieTable movies={movies} setSelectedMovie={setSelectedMovie} />
-      )}
+      <MovieTable movies={movies} setSelectedMovie={setSelectedMovie} />
       <MovieReviewForm selectedMovie={selectedMovie} />
     </Container>
   );

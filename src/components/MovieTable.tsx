@@ -26,12 +26,14 @@ export const MovieTable = ({
   setSelectedMovie: Dispatch<SetStateAction<Movie | undefined>>;
 }) => {
   return (
-    <DataGrid
-      rows={movies}
-      columns={columns}
-      onRowSelectionModelChange={(index) => {
-        setSelectedMovie(movies[index[0] - 1]);
-      }}
-    />
+    movies.length && (
+      <DataGrid
+        rows={movies}
+        columns={columns}
+        onRowSelectionModelChange={(index) => {
+          setSelectedMovie(movies[index[0] - 1]);
+        }}
+      />
+    )
   );
 };
