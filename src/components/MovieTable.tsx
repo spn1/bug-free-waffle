@@ -4,7 +4,7 @@ import { calculateAverageReviewScore } from "../utils/calculateAverageReviewScor
 import { Dispatch, SetStateAction } from "react";
 
 const columns: GridColDef[] = [
-  { field: "title", headerName: "Title", width: 200 },
+  { field: "title", headerName: "Title", width: 300 },
   {
     field: "averageReviewScore",
     headerName: "Average Review Score",
@@ -13,8 +13,9 @@ const columns: GridColDef[] = [
       `${calculateAverageReviewScore(params.row.reviews)}`,
   },
   {
-    field: "filmCompanyId",
+    field: "company",
     headerName: "Company",
+    width: 300,
   },
 ];
 
