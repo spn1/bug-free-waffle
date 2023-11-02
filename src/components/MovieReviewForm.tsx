@@ -2,7 +2,6 @@ import { useCallback, useState } from "react";
 import { Movie } from "../types/movie";
 import {
   Box,
-  TextField,
   Input,
   Button,
   InputLabel,
