@@ -26,6 +26,7 @@ export const useMovies = () => {
   const [error, setError] = useState<string | undefined>();
 
   const fetchMovies = () => {
+    setError(undefined);
     setMovies([]);
     setMovieCompanies([]);
     fetchData("https://giddy-beret-cod.cyclic.app/movies", setMovies, setError);
