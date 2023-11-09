@@ -8,15 +8,14 @@ import {
   FormControl,
   FormHelperText,
 } from "@mui/material";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import { useSubmitReview } from "../hooks/useSubmitReview";
+import { MobileDialogWrapper } from "./MobileDialogWrapper";
 
 export const MovieReviewForm = ({
   selectedMovie,
 }: {
   selectedMovie: Movie | undefined;
 }) => {
-  const matches = useMediaQuery((theme) => theme.breakpoints.up("sm"));
   const [review, setReview] = useState<string>("");
   const [formError, setFormError] = useState<string>();
   const {
@@ -67,35 +66,37 @@ export const MovieReviewForm = ({
           : "No Movie Selected"}
       </p>
       {selectedMovie && (
-        <Box component="form" onSubmit={onSubmit} sx={{ display: "block" }}>
-          <p>Please leave a review below</p>
-          <FormControl
-            disabled={loading}
-            error={error}
-            variant="standard"
-            sx={{ display: "block" }}
-          >
-            <InputLabel htmlFor="review">Review:</InputLabel>
-            <Input
-              type="textarea"
-              id="review"
-              value={review}
-              fullWidth
-              aria-describedby="review-error-text"
-              onChange={onReviewChange}
-            />
-            <FormHelperText id="review-error-text">
-              {response || formError}
-            </FormHelperText>
-          </FormControl>
-          <Button
-            sx={{ my: 2, display: "block" }}
-            type="submit"
-            variant="contained"
-          >
-            Submit
-          </Button>
-        </Box>
+        <MobileDialogWrapper breakpoint="sm">
+          <Box component="form" onSubmit={onSubmit} sx={{ display: "block" }}>
+            <p>Please leave a review below</p>
+            <FormControl
+              disabled={loading}
+              error={error}
+              variant="standard"
+              sx={{ display: "block" }}
+            >
+              <InputLabel htmlFor="review">Review:</InputLabel>
+              <Input
+                type="textarea"
+                id="review"
+                value={review}
+                fullWidth
+                aria-describedby="review-error-text"
+                onChange={onReviewChange}
+              />
+              <FormHelperText id="review-error-text">
+                {response || formError}
+              </FormHelperText>
+            </FormControl>
+            <Button
+              sx={{ my: 2, display: "block" }}
+              type="submit"
+              variant="contained"
+            >
+              Submit
+            </Button>
+          </Box>
+        </MobileDialogWrapper>
       )}
     </Box>
   );
