@@ -8,7 +8,7 @@ import {
   FormControl,
   FormHelperText,
 } from "@mui/material";
-import axios from "axios";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { useSubmitReview } from "../hooks/useSubmitReview";
 
 export const MovieReviewForm = ({
@@ -16,6 +16,7 @@ export const MovieReviewForm = ({
 }: {
   selectedMovie: Movie | undefined;
 }) => {
+  const matches = useMediaQuery((theme) => theme.breakpoints.up("sm"));
   const [review, setReview] = useState<string>("");
   const [formError, setFormError] = useState<string>();
   const {
@@ -65,9 +66,9 @@ export const MovieReviewForm = ({
             : "No Movie Title"
           : "No Movie Selected"}
       </p>
-      {selectedMovie && <p>Please leave a review below</p>}
       {selectedMovie && (
         <Box component="form" onSubmit={onSubmit} sx={{ display: "block" }}>
+          <p>Please leave a review below</p>
           <FormControl
             disabled={loading}
             error={error}
