@@ -9,6 +9,7 @@ import {
   FormHelperText,
 } from "@mui/material";
 import axios from "axios";
+import { useSubmitReview } from "../hooks/useSubmitReview";
 
 export const MovieReviewForm = ({
   selectedMovie,
@@ -16,53 +17,44 @@ export const MovieReviewForm = ({
   selectedMovie: Movie | undefined;
 }) => {
   const [review, setReview] = useState<string>("");
-  const [message, setMessage] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false);
+  const [formError, setFormError] = useState<string>();
+  const {
+    submitReview,
+    response,
+    loading,
+    error: submitError,
+    reset,
+  } = useSubmitReview();
 
   const onReviewChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
+      setFormError(undefined);
+
       if (error) {
-        setError(false);
-        setMessage("");
+        reset();
       }
 
-      const review = event.target.value;
+      const newReview = event.target.value;
 
-      if (review.length >= 100) {
-        setMessage("Reviews have a maximum length of 100 characters");
-        setError(true);
+      if (newReview.length > 100) {
+        setFormError("Reviews have a maximum length of 100 characters");
         return;
       }
 
-      setReview(review);
-    },
-    [error]
-  );
-
-  const submitReview = useCallback(
-    (event: React.FormEvent<HTMLInputElement>): void => {
-      event.preventDefault();
-
-      setLoading(true);
-      axios
-        .post("https://giddy-beret-cod.cyclic.app/submitReview", {
-          review,
-        })
-        .then((response) => {
-          setMessage(response?.data?.message);
-          setError(false);
-        })
-        .catch(() => {
-          setMessage(
-            "There was an error submitting your review, please try again later."
-          );
-          setError(true);
-        });
-      setLoading(false);
+      setReview(newReview);
     },
     [review]
   );
+
+  const onSubmit = useCallback(
+    (event: React.FormEvent<HTMLInputElement>) => {
+      event.preventDefault();
+      submitReview(review);
+    },
+    [review]
+  );
+
+  const error = Boolean(submitError || formError);
 
   return (
     <Box sx={{ py: 2 }}>
@@ -75,7 +67,7 @@ export const MovieReviewForm = ({
       </p>
       {selectedMovie && <p>Please leave a review below</p>}
       {selectedMovie && (
-        <Box component="form" onSubmit={submitReview} sx={{ display: "block" }}>
+        <Box component="form" onSubmit={onSubmit} sx={{ display: "block" }}>
           <FormControl
             disabled={loading}
             error={error}
@@ -91,7 +83,9 @@ export const MovieReviewForm = ({
               aria-describedby="review-error-text"
               onChange={onReviewChange}
             />
-            <FormHelperText id="review-error-text">{message}</FormHelperText>
+            <FormHelperText id="review-error-text">
+              {response || formError}
+            </FormHelperText>
           </FormControl>
           <Button
             sx={{ my: 2, display: "block" }}
