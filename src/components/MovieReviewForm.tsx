@@ -49,6 +49,7 @@ export const MovieReviewForm = ({
   const onSubmit = useCallback(
     (event: React.FormEvent<HTMLInputElement>) => {
       event.preventDefault();
+      setFormError(undefined);
       submitReview(review);
     },
     [review]
